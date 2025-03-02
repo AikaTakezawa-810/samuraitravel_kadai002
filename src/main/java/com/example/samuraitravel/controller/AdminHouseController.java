@@ -22,16 +22,19 @@ import com.example.samuraitravel.form.HouseEditForm;
 import com.example.samuraitravel.form.HouseRegisterForm;
 import com.example.samuraitravel.repository.HouseRepository;
 import com.example.samuraitravel.service.HouseService;
+import com.example.samuraitravel.service.ReviewService;
 
 @Controller
 @RequestMapping("/admin/houses")
 public class AdminHouseController {
 	private final HouseRepository houseRepository;
 	private final HouseService houseService;
+	private final ReviewService reviewService;
 	
-	public AdminHouseController(HouseRepository houseRepository, HouseService houseService) {
+	public AdminHouseController(HouseRepository houseRepository, HouseService houseService, ReviewService reviewService) {
 		this.houseRepository = houseRepository;
 		this.houseService = houseService;
+		this.reviewService = reviewService;
 	}
 	
 	@GetMapping
@@ -75,7 +78,7 @@ public class AdminHouseController {
 		return "redirect:/admin/houses";
 	}
 	
-	@GetMapping("/houses/{id}/edit")
+	@GetMapping("/{id}/edit")
 	public String edit (@PathVariable(name = "id") Integer id, Model model) {
 		House house = houseRepository.getReferenceById(id);
 		String imageName = house.getImageName();
@@ -96,6 +99,13 @@ public class AdminHouseController {
 		houseService.update(houseEditForm);
 		redirectAttributes.addFlashAttribute("successMessage", "民宿情報を編集しました。");
 		
+		return "redirect:/admin/houses";
+	}
+	
+	@PostMapping("/{id}/delete")
+	public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		houseRepository.deleteById(id);
+		redirectAttributes.addFlashAttribute("successMessage", "民宿を削除しました。");
 		return "redirect:/admin/houses";
 	}
 }
