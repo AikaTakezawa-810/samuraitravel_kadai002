@@ -2,7 +2,6 @@ package com.example.samuraitravel.controller;
 
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +31,7 @@ public class AdminReviewController {
 	
 	@GetMapping("/houses/{id}/review")
 	public String getReviewPage(@PathVariable Integer id, Model model, @RequestParam(defaultValue = "0") int page) {
-	    List<Review> reviewPage = reviewRepository.findByHouseId(id, PageRequest.of(page, 10));
+	    List<Review> reviewPage = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
 	    model.addAttribute("reviewPage", reviewPage);
 	    return "review/index";
 	}

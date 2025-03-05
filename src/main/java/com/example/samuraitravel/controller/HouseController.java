@@ -79,7 +79,7 @@ public class HouseController {
 	@GetMapping("/{id}")
 	public String show(@PathVariable(name ="id") Integer id, Model model) {
 		House house = houseRepository.getReferenceById(id);
-		List<Review> review = reviewRepository.findByHouseId(id, null);
+		List<Review> review = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
 		model.addAttribute("review", review);
 		
 		model.addAttribute("house", house);
@@ -90,7 +90,7 @@ public class HouseController {
 	
 	@GetMapping("/{id}/review")
 	public String index(@PathVariable(name ="id") Integer id,Model model) {
-		List<Review> review = reviewRepository.findByHouseId(id, null);
+		List<Review> review = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
 		model.addAttribute("review", review);
 		return "review/index";
 	}
