@@ -24,18 +24,35 @@
 						</ol>
 						</nav>
 						
+						<!-- レビューリストの表示 -->
+						<div class ="review-list">
+							<ul>
+								<li th:each = "rev : ${review}">
+									<!-- ここでレビューの属性を表示します -->
+									<span th:text="${rev.content}">レビュー内容</span>
+								</li>
+							</ul>
+						</div>
+						
 						<!-- ページネーション -->
-						<div th:if ="${reviewPage.totalPages > 1}" class ="d-flex justify-content-center">
+						<div th:if ="${reviewPage != null and reviewPage.totalPages > 1}" class ="d-flex justify-content-center">
 							<nav aria-label = "レビュー一覧ページ">
 								<ul class ="pagination">
-									<li class ="page-item">
-										<span th:if ="${reviewPage.isFirst()}" class ="page-link disabled">前</span>
+									<li th:if = "${reviewPage.isFirst()}" class = "page-item">
+										<span class ="page-link">前</span>
 									</li>
-									<li th:each = "i : ${#numbers.sequence(0, reviewPage.getTotalPages() - 1)}" class ="review-item">
-										<span th:if="${i == reviewPage.getNumber()}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+									<li th:if = "${!reviewPage.isFirst()}" class = "page-item">
+										<a th:href="@{review(index=${reviewPage.number - 1})}" class="page-link">前</a>
 									</li>
-									<li>
-										<span th:if = "${reviewPage.isLast()}" class = "page-link disabled">次</span>
+									<li th:each = "i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}" class ="page-item">
+										<a th:if = "${i != reviewPage.number}" th:href = "@{review(index=${i})}" class ="page-link" th:text="${i + 1}">1</a>
+										<span th:if = "${i == reviewPage.number}" class ="page-link active" th:text = "${i + 1}">1</span>
+									</li>
+									<li th:if ="${reviewPage.isLast()}" class ="page-item disabled">
+										<span class = "page-link">次</span>
+									</li>
+									<li th:if ="${!reviewPage.isLast()}" class ="page-item">
+										<a th:href ="@{review(index=${reviewPage.number + 1})}" class = "page-link">次</a>
 									</li>
 								</ul>
 							</nav>

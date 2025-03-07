@@ -88,10 +88,10 @@ public class HouseController {
 		return "houses/show";
 	}
 	
-	@GetMapping("/{id}/review")
-	public String index(@PathVariable(name ="id") Integer id,Model model) {
-		List<Review> review = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
-		model.addAttribute("review", review);
-		return "review/index";
-	}
+//	@GetMapping("/{id}/review")
+//	public String index(@PathVariable(name ="id") Integer id,Model model) {
+//		List<Review> review = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
+//		model.addAttribute("review", review);
+//		return "review/index";
+//	}
 }
