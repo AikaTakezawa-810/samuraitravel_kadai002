@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th ="https://www.thymeleaf.org" xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace = "~{fragment :: meta}"></div>
+		
+		<div th:replace = "~{fragment :: styles}"></div>
+		
+		<title>レビュー一覧</title>
+	</head>
+	<body>
+		<div class ="samuraitravel-wrapper">
+			<!-- ヘッダー -->
+			<div th:replace = "~{fragment :: header}"></div>
+			
+			<main>
+				<div class ="container samuraitravel-container pb-5">
+					<div class = "row justify-content-center">
+						<nav class ="my-3" style ="--bs-breadcrumb-divider: '>';" aria-label ="breadcrumb">
+							<ol class = "breadcrumb mb-0">
+							<li class = "breadcrumb-item"><a th:href ="@{/}">ホーム</a></li>
+							<li class = "breadcrumb-item"><a th:href ="@{/}">民宿一覧</a></li>
+							<li class = "breadcrumb-item"><a th:href ="@{/}">民宿詳細</a></li>
+							<li class = "breadcrumb-item active" aria-current = "page">レビュー一覧</li>
+						</ol>
+						</nav>
+						
+						<!-- レビューリストの表示 -->
+						<div class ="review-list">
+							<ul>
+								<li th:each = "rev : ${review}">
+									<!-- ここでレビューの属性を表示します -->
+									<span th:text="${rev.content}">レビュー内容</span>
+								</li>
+							</ul>
+						</div>
+						
+						<!-- ページネーション -->
+						<div th:if ="${reviewPage != null and reviewPage.totalPages > 1}" class ="d-flex justify-content-center">
+							<nav aria-label = "レビュー一覧ページ">
+								<ul class ="pagination">
+									<li th:if = "${reviewPage.isFirst()}" class = "page-item">
+										<span class ="page-link">前</span>
+									</li>
+									<li th:if = "${!reviewPage.isFirst()}" class = "page-item">
+										<a th:href="@{review(index=${reviewPage.number - 1})}" class="page-link">前</a>
+									</li>
+									<li th:each = "i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}" class ="page-item">
+										<a th:if = "${i != reviewPage.number}" th:href = "@{review(index=${i})}" class ="page-link" th:text="${i + 1}">1</a>
+										<span th:if = "${i == reviewPage.number}" class ="page-link active" th:text = "${i + 1}">1</span>
+									</li>
+									<li th:if ="${reviewPage.isLast()}" class ="page-item disabled">
+										<span class = "page-link">次</span>
+									</li>
+									<li th:if ="${!reviewPage.isLast()}" class ="page-item">
+										<a th:href ="@{review(index=${reviewPage.number + 1})}" class = "page-link">次</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						</div>
+					</div>				
+			</main>
+			
+			<!-- フッター -->
+			<div th:replace = "~{fragment :: footer}"></div>
+			</div>
+			<div th:replace = "~{fragment :: script}"></div>
+	</body>
+</html>
