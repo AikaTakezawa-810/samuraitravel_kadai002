@@ -1,8 +1,6 @@
 package com.example.samuraitravel.controller;
 
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -77,21 +75,14 @@ public class HouseController {
 	}
 	
 	@GetMapping("/{id}")
-	public String show(@PathVariable(name ="id") Integer id, Model model) {
+	public String show(@PathVariable(name ="id") Integer id, Model model, @PageableDefault(page = 0, size = 6, sort = "id", direction = Direction.ASC) Pageable pageable) {
 		House house = houseRepository.getReferenceById(id);
-		List<Review> review = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
+		Page<Review> review = reviewRepository.findByHouseIdOrderByCreatedAtDesc(id, pageable);
 		model.addAttribute("review", review);
-		
+		model.addAttribute("reviewTotalElements", review.getTotalElements());
 		model.addAttribute("house", house);
 		model.addAttribute("reservationInputForm", new ReservationInputForm());
 		
 		return "houses/show";
 	}
-	
-//	@GetMapping("/{id}/review")
-//	public String index(@PathVariable(name ="id") Integer id,Model model) {
-//		List<Review> review = reviewRepository.findTop6ByHouseIdOrderByCreatedAtDesc(id);
-//		model.addAttribute("review", review);
-//		return "review/index";
-//	}
 }
