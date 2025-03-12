@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.samuraitravel.entity.Review;
 import com.example.samuraitravel.entity.User;
+import com.example.samuraitravel.form.ReviewEditForm;
 import com.example.samuraitravel.form.ReviewRegisterForm;
 import com.example.samuraitravel.repository.ReviewRepository;
 import com.example.samuraitravel.security.UserDetailsImpl;
@@ -51,13 +53,23 @@ public class ReviewController {
 		
 		return "redirect:/houses/" + houseId;
 	}
+	
+	@GetMapping("/{reviewId}/edit")
+	public String edit(@PathVariable(name = "reviewId") Integer reviewId, Model model) {
+		Review review = reviewRepository.getReferenceById(reviewId);
+		ReviewEditForm reviewEditForm = new ReviewEditForm(review.getHouseId(), null, review.getRating(), review.getContent());
 		
-	@PostMapping("/{houseId}/delete")
-	public String delete(@PathVariable(name = "houseId") Integer houseId, RedirectAttributes redirectAttributes) {
-		reviewRepository.deleteById(houseId);
+		model.addAttribute("reviewEditForm", reviewEditForm);
+		
+		return "review/houses/edit";
+	}
+		
+	@PostMapping("/{reviewId}/delete")
+	public String delete(@PathVariable(name = "reviewId") Integer reviewId, RedirectAttributes redirectAttributes) {
+		reviewRepository.deleteById(reviewId);
 		
 		redirectAttributes.addFlashAttribute("successMessage", "レビューを削除しました。");
 		
-		return "redirect:/houses/" + houseId;
+		return "redirect:/houses/{houseId}";
 	}
 }

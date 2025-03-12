@@ -11,7 +11,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ReviewEditForm {
 	@NotNull
-	private Integer id;
+	private Integer houseId;
+	
 	
 	@NotBlank(message = "氏名を入力してください。")
 	private String name;
